@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from .forms import SignupForm, LoginForm
+from django.http import HttpResponseServerError
 
 def user_signup(request):
     if request.user.is_authenticated:
@@ -17,6 +18,8 @@ def user_signup(request):
             return render(request, 'users/signup.html', context={"form": form})
 
     return render(request, 'users/signup.html', context={"form": SignupForm()})
+   
+
 
 def user_login(request):
     if request.user.is_authenticated:

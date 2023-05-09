@@ -7,8 +7,9 @@ from .utils import get_mongodb
 
 
 def main(request, page=1):
-    db = get_mongodb()
-    quotes = db.quotes.find()
+   # db = get_mongodb()
+   # quotes = db.quotes.find()
+    quotes = Quote.objects.all()
     per_page = 10
     paginator = Paginator(list(quotes), per_page)
     quotes_on_page = paginator.page(page)
@@ -16,7 +17,7 @@ def main(request, page=1):
 
 
 def author_about(request, _id):
-    author = Author.objects.get(_id)
+    author = Author.objects.filter(id=_id).first()
     return render(request, 'quotes/author.html', context={'author': author})
 
 
@@ -41,3 +42,8 @@ def add_author(request):
             return redirect(to='quotes:main')
 
     return render(request, 'quotes/add_author.html', context={"title": f"title", "form": form})
+
+
+def tag_quotes(request, tag):
+    quotes = Quote.objects.filter(tags__name=tag)
+    return render(request, 'quotes/tag_quotes.html', context={'quotes': quotes})
